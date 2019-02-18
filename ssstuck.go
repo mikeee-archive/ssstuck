@@ -44,9 +44,9 @@ func getServer() ssh.ServerConfig {
 		PasswordCallback:  authPassword,
 	}
 
-	keyBytes, _ := rsa.GenerateKey(rand.Reader, 4096)
-	key, _ := ssh.NewSignerFromSigner(keyBytes)
-	serverConfig.AddHostKey(key)
+	privateKey, _ := rsa.GenerateKey(rand.Reader, 4096)
+	privateKeySigner, _ := ssh.NewSignerFromSigner(privateKey)
+	serverConfig.AddHostKey(privateKeySigner)
 
 	return *serverConfig
 }
