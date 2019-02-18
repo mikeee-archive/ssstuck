@@ -1,5 +1,7 @@
 # ssstuck
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/0d2f83396da20777ed70/maintainability)](https://codeclimate.com/github/mikeee/ssstuck/maintainability)
+
 A simple SSH honeypot written in Go.
 
 ## Licence
