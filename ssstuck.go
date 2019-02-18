@@ -53,7 +53,7 @@ func getServer() ssh.ServerConfig {
 
 func authKey(conn ssh.ConnMetadata, key ssh.PublicKey) (*ssh.Permissions, error) {
 	log.WithFields(log.Fields{
-		"type":   "public key",
+		"type":   "public-key",
 		"ip":     conn.RemoteAddr(),
 		"key":    key,
 		"client": string(conn.ClientVersion()),
