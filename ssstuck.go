@@ -96,7 +96,7 @@ func handler(serverConfig *ssh.ServerConfig, listener net.Listener) {
 func connection(serverConfig *ssh.ServerConfig, conn net.Conn) {
 	defer conn.Close()
 	_, _, _, err := ssh.NewServerConn(conn, serverConfig)
-	if err != nil {
+	if err == nil {
 		log.Panic("WARNING - successfully authenticated, terminating instance")
 	}
 }
