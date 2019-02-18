@@ -1,0 +1,12 @@
+version: '3'
+services:
+  #########################
+  # Services - Testing #
+  #########################
+  honeypot:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    image: ssstuck
+    ports:
+      - "22:2222"
