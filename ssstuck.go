@@ -4,8 +4,9 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"fmt"
+	"net"
 
-	log "github.com/sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 
 	"golang.org/x/crypto/ssh"
 )
@@ -30,6 +31,11 @@ func Serve(config Config) {
 		log.Panicf("invalid setting: %s", err)
 	}
 	serverConfig := getServer()
+
+	port := fmt.Sprintf(":%d", config.Port)
+	listener := listen(port)
+
+	handler(&serverConfig, listener)
 }
 
 func getServer() ssh.ServerConfig {
@@ -64,4 +70,33 @@ func authPassword(conn ssh.ConnMetadata, password []byte) (*ssh.Permissions, err
 		"client":   string(conn.ClientVersion()),
 	}).Info("connection attempt")
 	return nil, fmt.Errorf("invalid credentials")
+}
+
+func listen(port string) net.Listener {
+	listener, err := net.Listen("tcp", port)
+	if err != nil {
+		log.Fatalf("failed to listen on %s", port)
+	}
+
+	log.Printf("listening on %s", port)
+	return listener
+}
+
+func handler(serverConfig *ssh.ServerConfig, listener net.Listener) {
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			log.Errorf("connection fail: %s", err)
+			continue
+		}
+		go connection(serverConfig, conn)
+	}
+}
+
+func connection(serverConfig *ssh.ServerConfig, conn net.Conn) {
+	defer conn.Close()
+	_, _, _, err := ssh.NewServerConn(conn, serverConfig)
+	if err != nil {
+		log.Panic("WARNING - successfully authenticated, terminating instance")
+	}
 }
