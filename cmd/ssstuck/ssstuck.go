@@ -7,9 +7,9 @@ import (
 )
 
 func main() {
-	fmt.Println("Starting ssstuck")
 	config := ssstuck.Config{
 		Port: 2222,
 	}
+	fmt.Println("Starting ssstuck on port:" + config.Port)
 	ssstuck.Serve(config)
 }
